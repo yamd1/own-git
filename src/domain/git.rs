@@ -1,5 +1,6 @@
 use super::commit::Commit;
 
+#[derive(Debug)]
 pub struct Git {
     last_commit_id: u32,
     name: String,
@@ -17,11 +18,12 @@ impl Git {
         }
     }
 
-    pub fn commit(&self, message: String) -> Commit {
-        Commit::new(message)
+    pub fn commit(&mut self, message: String) -> Commit {
+        self.last_commit_id += 1;
+        Commit::new(self.last_commit_id, message)
     }
 
     pub fn echo(&self) {
-        println!("{}, {}", &self.last_commit_id, &self.name)
+        println!("{}, {}", self.last_commit_id, self.name)
     }
 }

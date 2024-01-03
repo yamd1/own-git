@@ -4,11 +4,11 @@ pub struct Commit {
 }
 
 impl Commit {
-    pub fn new(message: String) -> Self {
-        Commit { id: 1, message }
+    pub fn new(id: u32, message: String) -> Self {
+        Commit { id, message }
     }
 
-    pub fn echo_message(&self) -> &str {
-        &self.message
+    pub fn echo_message(&self) {
+        println!("{}, {}", self.id, self.message);
     }
 }

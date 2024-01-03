@@ -3,8 +3,11 @@ mod domain;
 use domain::git::Git;
 
 fn main() {
-    let git = Git::new(None, "own-git".to_string());
+    let mut git = Git::new(None, "own-git".to_string());
     git.echo();
-    let commit = git.commit("hello".to_string());
-    println!("{}", commit.echo_message());
+    let mut commit = git.commit("hello".to_string());
+    commit.echo_message();
+
+    let mut commit = git.commit("second commit".to_string());
+    commit.echo_message();
 }
