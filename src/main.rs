@@ -1,3 +1,8 @@
+mod domain;
+
+use domain::git::Git;
+
 fn main() {
-    println!("Hello, world!");
+    let git = Git::new("own-git".to_string());
+    println!("{}", git.echo());
 }
