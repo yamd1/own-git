@@ -6,7 +6,7 @@ use super::commit::Commit;
 pub struct Git {
     last_commit_id: u32,
     name: String,
-    HEAD: Option<Commit>,
+    HEAD: Option<&'static Commit>,
 }
 
 impl Git {
@@ -21,19 +21,22 @@ impl Git {
 
     pub fn commit(&mut self, message: String) -> Commit {
         self.last_commit_id += 1;
-        let commit = Commit::new(self.last_commit_id, Box::new(self.HEAD.clone()), message);
-        self.HEAD = Some(commit.clone());
+        let commit = Commit::new(self.last_commit_id, self.HEAD, message);
+        self.HEAD = Some(&commit);
 
         commit
     }
 
-    pub fn log(&self) -> Vec<Box<Option<Commit>>> {
-        let history: Vec<Box<Option<Commit>>> = Vec::new();
+    pub fn log(&self) -> Vec<Option<&'static Commit>> {
+        let mut history: Vec<Option<&'static Commit>> = Vec::new();
 
         let mut commit = self.HEAD;
         loop {
             match commit {
-                Some(v) => history.push(v.parent),
+                Some(v) => {
+                    history.push(v.parent);
+                    commit = v.parent;
+                }
                 None => break,
             }
         }
