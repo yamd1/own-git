@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct Commit {
     id: u32,
     message: String,

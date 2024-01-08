@@ -1,9 +1,12 @@
+use std::borrow::{Borrow, BorrowMut};
+
 use super::commit::Commit;
 
 #[derive(Debug)]
 pub struct Git {
     last_commit_id: u32,
     name: String,
+    HEAD: Option<Commit>,
 }
 
 impl Git {
@@ -12,12 +15,16 @@ impl Git {
         Git {
             last_commit_id,
             name,
+            HEAD: None,
         }
     }
 
     pub fn commit(&mut self, message: String) -> Commit {
         self.last_commit_id += 1;
-        Commit::new(self.last_commit_id, message)
+        let commit = Commit::new(self.last_commit_id, message);
+        self.HEAD = Some(commit.clone());
+
+        commit
     }
 
     pub fn log(&self) -> Vec<Git> {
