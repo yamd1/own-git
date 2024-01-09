@@ -1,12 +1,13 @@
 #[derive(Debug, Clone)]
 pub struct Commit {
-    id: u32,
-    pub parent: Option<&'static Commit>,
+    pub id: u32,
+    pub parent: Option<Box<Commit>>,
     message: String,
 }
 
 impl Commit {
-    pub fn new(id: u32, parent: Option<&'static Commit>, message: String) -> Self {
+    pub fn new(id: u32, parent: Option<Commit>, message: String) -> Self {
+        let parent = parent.map(|p| Box::new(p));
         Commit {
             id,
             parent,

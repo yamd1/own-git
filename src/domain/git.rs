@@ -1,12 +1,10 @@
-use std::borrow::{Borrow, BorrowMut};
-
 use super::commit::Commit;
 
 #[derive(Debug, Clone)]
 pub struct Git {
     last_commit_id: u32,
     name: String,
-    HEAD: Option<&'static Commit>,
+    HEAD: Option<Commit>,
 }
 
 impl Git {
@@ -21,21 +19,22 @@ impl Git {
 
     pub fn commit(&mut self, message: String) -> Commit {
         self.last_commit_id += 1;
-        let commit = Commit::new(self.last_commit_id, self.HEAD, message);
-        self.HEAD = Some(&commit);
+        let commit = Commit::new(self.last_commit_id, self.HEAD.clone(), message);
+        self.HEAD = Some(commit.clone());
 
         commit
     }
 
-    pub fn log(&self) -> Vec<Option<&'static Commit>> {
-        let mut history: Vec<Option<&'static Commit>> = Vec::new();
+    pub fn log(&self) -> Vec<Option<Commit>> {
+        let mut history: Vec<Option<Commit>> = Vec::new();
 
-        let mut commit = self.HEAD;
+        let mut commit = self.HEAD.clone();
         loop {
             match commit {
                 Some(v) => {
-                    history.push(v.parent);
-                    commit = v.parent;
+                    let resolved = v.parent.map(|p| p.as_ref().to_owned());
+                    history.push(resolved.clone());
+                    commit = resolved;
                 }
                 None => break,
             }
@@ -61,7 +60,7 @@ mod tests {
 
         let logs = repo.log();
         assert_eq!(logs.len(), 2);
-        assert_eq!(logs[0].last_commit_id, 0);
-        assert_eq!(logs[1].last_commit_id, 1);
+        assert_eq!(logs[0].as_ref().unwrap().id, 0);
+        assert_eq!(logs[1].as_ref().unwrap().id, 1);
     }
 }
