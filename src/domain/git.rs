@@ -4,7 +4,7 @@ use super::commit::Commit;
 pub struct Git {
     last_commit_id: u32,
     name: String,
-    HEAD: Option<Commit>,
+    head: Option<Commit>,
 }
 
 impl Git {
@@ -13,14 +13,14 @@ impl Git {
         Git {
             last_commit_id,
             name,
-            HEAD: None,
+            head: None,
         }
     }
 
     pub fn commit(&mut self, message: String) -> Commit {
         self.last_commit_id += 1;
-        let commit = Commit::new(self.last_commit_id, self.HEAD.clone(), message);
-        self.HEAD = Some(commit.clone());
+        let commit = Commit::new(self.last_commit_id, self.head.clone(), message);
+        self.head = Some(commit.clone());
 
         commit
     }
@@ -28,13 +28,12 @@ impl Git {
     pub fn log(&self) -> Vec<Option<Commit>> {
         let mut history: Vec<Option<Commit>> = Vec::new();
 
-        let mut commit = self.HEAD.clone();
+        let mut commit = self.head.clone();
         loop {
             match commit {
                 Some(v) => {
-                    let resolved = v.parent.map(|p| p.as_ref().to_owned());
-                    history.push(resolved.clone());
-                    commit = resolved;
+                    history.push(Some(v.clone()));
+                    commit = v.parent.map(|p| p.as_ref().to_owned());
                 }
                 None => break,
             }
@@ -60,7 +59,7 @@ mod tests {
 
         let logs = repo.log();
         assert_eq!(logs.len(), 2);
-        assert_eq!(logs[0].as_ref().unwrap().id, 0);
+        assert_eq!(logs[0].as_ref().unwrap().id, 2);
         assert_eq!(logs[1].as_ref().unwrap().id, 1);
     }
 }
