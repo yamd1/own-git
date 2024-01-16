@@ -1,0 +1,16 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: ./.docker/Dockerfile
+      target: ${APP_BUILD_TARGET:-workspace}
+      args:
+        USER_UID: ${HOST_UID}
+        USER_GID: ${HOST_GID}
+    volumes:
+      - type: bind
+        source: .
+        target: /opt/app
+    environment:
+      - USER_UID=${HOST_UID}
+    tty: true
