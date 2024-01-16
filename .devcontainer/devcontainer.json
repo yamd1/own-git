@@ -19,13 +19,8 @@
     "vscode": {
       "extensions": [
         "streetsidesoftware.code-spell-checker",
-        "editorconfig.editorconfig",
-        "bmewburn.vscode-intelephense-client",
-        "klesun.deep-assoc-completion-vscode",
-        "valeryanm.vscode-phpsab",
-        "SanderRonde.phpstan-vscode",
-        "Kasik96.latte",
-        "formulahendry.code-runner"
+        "formulahendry.code-runner",
+        "rust-lang.rust-analyzer"
       ],
       "settings": {
         "[rust]": {
