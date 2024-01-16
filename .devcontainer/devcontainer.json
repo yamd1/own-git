@@ -1,0 +1,39 @@
+{
+  "name": "${localWorkspaceFolderBasename}",
+  "dockerComposeFile": [
+    "../compose.yml"
+  ],
+  "service": "app",
+  "remoteEnv": {
+    "LOCAL_WORKSPACE_FOLDER": "${localWorkspaceFolder}"
+  },
+  "remoteUser": "appuser",
+  "workspaceFolder": "/opt/app",
+  "features": {
+    "ghcr.io/devcontainers/features/common-utils:1": {
+      "version": "latest",
+      "username": "appuser"
+    }
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "streetsidesoftware.code-spell-checker",
+        "editorconfig.editorconfig",
+        "bmewburn.vscode-intelephense-client",
+        "klesun.deep-assoc-completion-vscode",
+        "valeryanm.vscode-phpsab",
+        "SanderRonde.phpstan-vscode",
+        "Kasik96.latte",
+        "formulahendry.code-runner"
+      ],
+      "settings": {
+        "[rust]": {
+          "editor.formatOnSave": true
+        },
+        "rust-analyzer.inlayHints.typeHints.hideNamedConstructor": false,
+        "rust-analyzer.inlayHints.parameterHints.enable": false
+      }
+    }
+  }
+}
