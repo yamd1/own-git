@@ -46,6 +46,10 @@ impl Git {
         history
     }
 
+    pub fn checkout(&self, name: String) -> String {
+        name
+    }
+
     pub fn echo(&self) {
         println!("{}, {}", self.last_commit_id, self.name)
     }
@@ -56,7 +60,7 @@ mod tests {
     use super::*;
 
     #[test]
-    fn success() {
+    fn success_commit() {
         let mut repo = Git::new("test".to_string());
         repo.commit("first commit".to_string());
         repo.commit("second commit".to_string());
@@ -65,5 +69,19 @@ mod tests {
         assert_eq!(logs.len(), 2);
         assert_eq!(logs[0].as_ref().unwrap().id, 2);
         assert_eq!(logs[1].as_ref().unwrap().id, 1);
+    }
+
+    #[test]
+    fn success_checkout() {
+        let mut repo = Git::new("test".to_string());
+        repo.commit("initial commit".to_string());
+
+        assert_eq!(repo.head.name, "main".to_string());
+        repo.checkout("testing".to_string());
+        assert_eq!(repo.head.name, "testing".to_string());
+        repo.checkout("main".to_string());
+        assert_eq!(repo.head.name, "main".to_string());
+        repo.checkout("testing".to_string());
+        assert_eq!(repo.head.name, "testing".to_string());
     }
 }
