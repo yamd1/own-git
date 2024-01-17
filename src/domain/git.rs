@@ -5,25 +5,26 @@ use super::commit::Commit;
 pub struct Git {
     last_commit_id: u32,
     name: String,
-    head: Option<Commit>,
+    head: Branch,
     main: Branch,
 }
 
 impl Git {
     pub fn new(name: String) -> Self {
         let last_commit_id = 0;
+        let main = Branch::new("main".to_string(), None);
         Git {
             last_commit_id,
             name,
-            head: None,
-            main: Branch::new("main".to_string(), None),
+            head: main.clone(),
+            main,
         }
     }
 
     pub fn commit(&mut self, message: String) -> Commit {
         self.last_commit_id += 1;
-        let commit = Commit::new(self.last_commit_id, self.head.clone(), message);
-        self.head = Some(commit.clone());
+        let commit = Commit::new(self.last_commit_id, self.head.commit.clone(), message);
+        self.head.commit = Some(commit.clone());
 
         commit
     }
@@ -31,7 +32,7 @@ impl Git {
     pub fn log(&self) -> Vec<Option<Commit>> {
         let mut history: Vec<Option<Commit>> = Vec::new();
 
-        let mut commit = self.head.clone();
+        let mut commit = self.head.commit.clone();
         loop {
             match commit {
                 Some(v) => {
