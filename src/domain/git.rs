@@ -1,3 +1,4 @@
+use super::branch::Branch;
 use super::commit::Commit;
 
 #[derive(Debug, Clone)]
@@ -5,6 +6,7 @@ pub struct Git {
     last_commit_id: u32,
     name: String,
     head: Option<Commit>,
+    main: Branch,
 }
 
 impl Git {
@@ -14,6 +16,7 @@ impl Git {
             last_commit_id,
             name,
             head: None,
+            main: Branch::new("main".to_string(), None),
         }
     }
 
