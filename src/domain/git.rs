@@ -7,6 +7,7 @@ pub struct Git {
     name: String,
     head: Branch,
     main: Branch,
+    branches: Vec<Branch>,
 }
 
 impl Git {
@@ -17,6 +18,7 @@ impl Git {
             last_commit_id,
             name,
             head: main.clone(),
+            branches: vec![main.clone()],
             main,
         }
     }
@@ -46,8 +48,17 @@ impl Git {
         history
     }
 
-    pub fn checkout(&self, name: String) -> String {
-        name
+    pub fn checkout(&mut self, name: String) -> Self {
+        for v in self.branches.clone().into_iter() {
+            if v.name == name {
+                self.head = v;
+                return self.to_owned();
+            }
+        }
+        let new_branch = Branch::new(name, self.head.commit.clone());
+        self.branches.push(new_branch.clone());
+        self.head = new_branch;
+        self.to_owned()
     }
 
     pub fn echo(&self) {
