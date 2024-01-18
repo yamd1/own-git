@@ -95,4 +95,18 @@ mod tests {
         repo.checkout("testing".to_string());
         assert_eq!(repo.head.name, "testing".to_string());
     }
+
+    #[test]
+    fn history_map() {
+        fn history_to_id_mappser(mut history: Vec<Option<Commit>>) -> String {
+            let mut ids: Vec<String> = vec![];
+            for item in history.into_iter() {
+                match item {
+                    Some(v) => ids.push(v.id.to_string()),
+                    None => break,
+                }
+            }
+            ids.join("-")
+        }
+    }
 }
